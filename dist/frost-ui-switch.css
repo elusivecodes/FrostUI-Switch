@@ -1,0 +1,93 @@
+.switch-outer {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.2rem;
+  outline: 0;
+}
+.switch-outer:focus {
+  box-shadow: 0 0 0 1px #2b55d4;
+}
+
+.switch-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.switch-primary {
+  color: #fff;
+  background-color: #2b55d4;
+}
+
+.switch-secondary {
+  color: #fff;
+  background-color: #606d7b;
+}
+
+.switch-success {
+  color: #fff;
+  background-color: #228c22;
+}
+
+.switch-info {
+  color: #fff;
+  background-color: #0f7f85;
+}
+
+.switch-warning {
+  color: #000;
+  background-color: #f5a119;
+}
+
+.switch-danger {
+  color: #fff;
+  background-color: #dc143c;
+}
+
+.switch-light {
+  color: #000;
+  background-color: #fafaff;
+}
+
+.switch-dark {
+  color: #fff;
+  background-color: #1f3333;
+}
+
+.switch-xl {
+  font-size: clamp(1.35rem, calc(1.35rem + 0.33vw), 1.5rem);
+}
+.switch-xl .switch-toggle-on,
+.switch-xl .switch-toggle-off {
+  padding: 0.25rem 1.5rem;
+}
+
+.switch-lg {
+  font-size: 1.25rem;
+}
+.switch-lg .switch-toggle-on,
+.switch-lg .switch-toggle-off {
+  padding: 0.25rem 1.25rem;
+}
+
+.switch-md {
+  font-size: 1rem;
+}
+.switch-md .switch-toggle-on,
+.switch-md .switch-toggle-off {
+  padding: 0.25rem 1rem;
+}
+
+.switch-sm {
+  font-size: 0.75rem;
+}
+.switch-sm .switch-toggle-on,
+.switch-sm .switch-toggle-off {
+  padding: 0.25rem 0.75rem;
+}
+
+.switch-xs {
+  font-size: 0.5rem;
+}
+.switch-xs .switch-toggle-on,
+.switch-xs .switch-toggle-off {
+  padding: 0.25rem 0.5rem;
+}

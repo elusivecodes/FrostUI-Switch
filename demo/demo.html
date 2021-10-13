@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrostUI Switch</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui.css">
+    <link rel="stylesheet" href="../dist/frost-ui-switch.css">
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui-bundle.js"></script>
+    <script src="../dist/frost-ui-switch.js"></script>
+</head>
+
+<body>
+    <div class="container pt-5">
+        <div class="mb-4">
+            <label for="switchDefault">Default</label>
+            <input id="switchDefault" type="checkbox" />
+        </div>
+        <div class="mb-4">
+            <label for="switchStyles">Styles</label>
+            <input id="switchStyles" type="checkbox" data-ui-on-style="success" data-ui-divider-style="dark" data-ui-off-style="danger" />
+        </div>
+        <div class="mb-4">
+            Sizes
+            <div class="mb-1">
+                <input id="switchXs" type="checkbox" data-ui-size="xs" />
+            </div>
+            <div class="mb-1">
+                <input id="switchSm" type="checkbox" data-ui-size="sm" />
+            </div>
+            <div class="mb-1">
+                <input id="switchMd" type="checkbox" data-ui-size="md" />
+            </div>
+            <div class="mb-1">
+                <input id="switchLg" type="checkbox" data-ui-size="lg" />
+            </div>
+            <div class="mb-1">
+                <input id="switchXl" type="checkbox" data-ui-size="xl" />
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="switchText">Text</label>
+            <input id="switchText" type="checkbox" data-ui-on-text="I" data-ui-off-text="O" />
+        </div>
+        <div class="mb-4">
+            <label for="switchWidth">Width</label>
+            <input id="switchWidth" type="checkbox" data-ui-label-width="100" />
+        </div>
+        <div class="mb-4">
+            <label for="switchDisabled">Disabled</label>
+            <input id="switchDisabled" type="checkbox" disabled />
+        </div>
+    </div>
+    <script>
+        const switchDefault = dom.findOne('#switchDefault');
+        const switchStyles = dom.findOne('#switchStyles');
+        const switchXs = dom.findOne('#switchXs');
+        const switchSm = dom.findOne('#switchSm');
+        const switchMd = dom.findOne('#switchMd');
+        const switchLg = dom.findOne('#switchLg');
+        const switchXl = dom.findOne('#switchXl');
+        const switchText = dom.findOne('#switchText');
+        const switchWidth = dom.findOne('#switchWidth');
+        const switchDisabled = dom.findOne('#switchDisabled');
+
+        UI.Switch.init(switchDefault);
+        UI.Switch.init(switchStyles);
+        UI.Switch.init(switchXs);
+        UI.Switch.init(switchSm);
+        UI.Switch.init(switchMd);
+        UI.Switch.init(switchLg);
+        UI.Switch.init(switchXl);
+        UI.Switch.init(switchText);
+        UI.Switch.init(switchWidth);
+        UI.Switch.init(switchDisabled);
+    </script>
+</body>
+
+</html>
