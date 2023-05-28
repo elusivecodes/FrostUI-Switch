@@ -1,383 +1,373 @@
-/**
- * FrostUI-Switch v1.0
- * https://github.com/elusivecodes/FrostUI-Switch
- */
-(function(global, factory) {
-    'use strict';
-
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = factory;
-    } else {
-        factory(global);
-    }
-
-})(window, function(window) {
-    'use strict';
-
-    if (!window) {
-        throw new Error('FrostUI-Switch requires a Window.');
-    }
-
-    if (!('UI' in window)) {
-        throw new Error('FrostUI-Switch requires FrostUI.');
-    }
-
-    const Core = window.Core;
-    const dom = window.dom;
-    const UI = window.UI;
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fr0st/ui'), require('@fr0st/query')) :
+    typeof define === 'function' && define.amd ? define(['exports', '@fr0st/ui', '@fr0st/query'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.UI = global.UI || {}, global.UI, global.fQuery));
+})(this, (function (exports, ui, $) { 'use strict';
 
     /**
      * Switch Class
      * @class
      */
-    class Switch extends UI.BaseComponent {
-
+    class Switch extends ui.BaseComponent {
         /**
          * New Switch constructor.
          * @param {HTMLElement} node The input node.
-         * @param {object} [settings] The options to create the Switch with.
-         * @returns {Switch} A new Switch object.
+         * @param {object} [options] The options to create the Switch with.
          */
-        constructor(node, settings) {
-            super(node, settings);
+        constructor(node, options) {
+            super(node, options);
 
             this._render();
+            this._refresh();
+            this._refreshDisabled();
             this._events();
 
             this._currentX = -this._toggleWidth;
-            const checked = dom.getProperty(this._node, 'checked');
-            this._animateState(checked);
 
-            this._refreshDisabled();
+            const checked = $.getProperty(this._node, 'checked');
+            this._animateState(checked);
         }
 
         /**
          * Disable the Switch.
-         * @returns {Switch} The Switch.
          */
         disable() {
-            dom.setAttribute(this._node, 'disabled', true);
+            $.setAttribute(this._node, { disabled: true });
             this._refreshDisabled();
-
-            return this;
         }
 
         /**
          * Dispose the Switch.
          */
         dispose() {
-            dom.remove(this._outerContainer);
-            dom.removeEvent(this._node, 'focus.ui.switch');
-            dom.removeEvent(this._node, 'change.ui.switch');
-            dom.removeAttribute(this._node, 'tabindex');
-            dom.removeClass(this._node, this.constructor.classes.hide);
+            $.remove(this._outerContainer);
+            $.removeEvent(this._node, 'focus.ui.switch');
+            $.removeEvent(this._node, 'change.ui.switch');
+            $.removeAttribute(this._node, 'tabindex');
+            $.removeClass(this._node, this.constructor.classes.hide);
 
             this._outerContainer = null;
             this._container = null;
+            this._onToggle = null;
+            this._divider = null;
+            this._offToggle = null;
 
             super.dispose();
         }
 
         /**
          * Enable the Switch.
-         * @returns {Switch} The Switch.
          */
         enable() {
-            dom.removeAttribute(this._node, 'disabled');
+            $.removeAttribute(this._node, 'disabled');
             this._refreshDisabled();
-
-            return this;
         }
 
         /**
          * Get the switch checkbox state.
-         * @returns {Boolean} Whether the switch checkbox is enabled.
+         * @return {Boolean} Whether the switch checkbox is enabled.
          */
         getState() {
-            return dom.getProperty(this._node, 'checked')
+            return $.getProperty(this._node, 'checked');
         }
 
         /**
          * Set the switch checkbox state.
-         * @param {Boolean} enabled Whether to enable the switch checkbox.
-         * @returns {Switch} The Switch.
+         * @param {Boolean} checked Whether to enable the switch checkbox.
          */
-        setState(enabled) {
-            this._animateState(enabled);
-
-            return this;
+        setState(checked) {
+            this._animateState(checked);
         }
 
         /**
          * Toggle switch checkbox state.
-         * @returns {Switch} The Switch.
          */
         toggleState() {
-            const enabled = this.getState();
-
-            this._animateState(!enabled);
-
-            return this;
+            const checked = this.getState();
+            this._animateState(!checked);
         }
-
     }
 
-
     /**
-     * Switch Events
+     * Attach events for the Switch.
      */
+    function _events() {
+        $.addEvent(this._node, 'focus.ui.switch', (_) => {
+            $.focus(this._outerContainer);
+        });
 
-    Object.assign(Switch.prototype, {
-
-        /**
-         * Attach events for the Switch.
-         */
-        _events() {
-            dom.addEvent(this._node, 'focus.ui.switch', _ => {
-                dom.focus(this._outerContainer);
-            });
-
-            dom.addEvent(this._node, 'change.ui.switch', e => {
-                if (!e.isTrusted || this._animating || this._sliding) {
-                    return;
-                }
-
-                const enabled = this.getState();
-                this._animateState(enabled);
-            });
-
-            dom.addEvent(this._outerContainer, 'keyup.ui.switch', e => {
-                if (e.code !== 'Space') {
-                    return;
-                }
-
-                const enabled = this.getState();
-                this._animateState(!enabled);
-            });
-
-            dom.addEvent(this._outerContainer, 'click.ui.switch', e => {
-                if (e.button || this._animating || this._sliding) {
-                    return;
-                }
-
-                const checked = this.getState();
-                this._animateState(!checked);
-            });
-
-            let startX;
-            dom.addEvent(this._outerContainer, 'mousedown.ui.switch touchstart.ui.switch', dom.mouseDragFactory(
-                e => {
-                    if (e.button || this._animating || this._sliding) {
-                        return false;
-                    }
-
-                    const pos = UI.getPosition(e);
-                    startX = pos.x - this._currentX;
-                },
-                e => {
-                    if (!this._sliding) {
-                        this._sliding = true;
-                    }
-
-                    const pos = UI.getPosition(e);
-                    const currentX = pos.x;
-                    this._currentX = Core.clamp(currentX - startX, -this._toggleWidth, 0);
-
-                    dom.setStyle(this._container, 'transform', `translateX(${this._currentX}px)`);
-
-                    const enabled = Math.abs(this._currentX) < this._toggleWidth / 2;
-                    this._setState(enabled);
-                },
-                _ => {
-                    if (this._sliding) {
-                        const enabled = this.getState();
-                        this._animateState(enabled);
-                    }
-
-                    setTimeout(_ => {
-                        this._sliding = false;
-                    }, 0);
-                }
-            ), { passive: true });
-        }
-
-    });
-
-
-    /**
-     * Switch Helpers
-     */
-
-    Object.assign(Switch.prototype, {
-
-        /**
-         * Animate the switch checkbox state.
-         * @param {Boolean} enabled Whether to enable the switch checkbox.
-         */
-        _animateState(enabled) {
-            if (this._animating) {
-                dom.stop(this._container);
-            }
-
-            let targetX, progress;
-            if (enabled) {
-                targetX = 0;
-                progress = (this._toggleWidth - Math.abs(this._currentX)) / this._toggleWidth;
-            } else {
-                targetX = -this._toggleWidth;
-                progress = Math.abs(this._currentX) / this._toggleWidth;
-            }
-
-            if (!this._settings.animate || progress >= 1) {
-                dom.setStyle(this._container, 'transform', `translateX(${targetX}px)`);
-                this._currentX = targetX;
-                this._setState(enabled);
-                this._animating = false;
+        $.addEvent(this._node, 'change.ui.switch', (e) => {
+            if (
+                e.skipUpdate ||
+                $.getDataset(this._container, 'uiAnimating') ||
+                $.getDataset(this._container, 'uiSliding')
+            ) {
                 return;
             }
 
-            const progressRemaining = 1 - progress;
+            const checked = this.getState();
+            this._animateState(checked);
+        });
 
-            this._animating = true;
-            dom.animate(
-                this._container,
-                (node, newProgress) => {
-                    const currentX = Core.lerp(this._currentX, targetX, progress + (newProgress * progressRemaining));
-                    dom.setStyle(node, 'transform', `translateX(${currentX}px)`);
-                },
-                {
-                    duration: this._settings.duration * progressRemaining
-                }
-            ).then(_ => {
-                this._currentX = targetX;
-                this._setState(enabled);
-            }).finally(_ => {
-                this._animating = false;
-            });
-        },
-
-        /**
-         * Refresh the disabled styling.
-         */
-        _refreshDisabled() {
-            if (dom.is(this._node, ':disabled')) {
-                dom.addClass(this._outerContainer, this.constructor.classes.disabled);
-            } else {
-                dom.removeClass(this._outerContainer, this.constructor.classes.disabled);
-            }
-        },
-
-        /**
-         * Set the switch checkbox state.
-         * @param {Boolean} enabled Whether to enable the switch checkbox.
-         */
-        _setState(enabled) {
-            if (this.getState() === enabled) {
+        $.addEvent(this._outerContainer, 'keyup.ui.switch', (e) => {
+            if (
+                e.code !== 'Space' ||
+                $.getDataset(this._container, 'uiAnimating') ||
+                $.getDataset(this._container, 'uiSliding')
+            ) {
                 return;
             }
 
-            dom.setProperty(this._node, 'checked', enabled);
+            this.toggleState();
+        });
 
-            dom.triggerEvent(this._node, 'change.ui.switch');
-        }
-
-    });
-
-
-    /**
-     * Switch Render
-     */
-
-    Object.assign(Switch.prototype, {
-
-        /**
-         * Render the switch.
-         */
-        _render() {
-            this._outerContainer = dom.create('div', {
-                class: this.constructor.classes.outer,
-                attributes: {
-                    tabindex: 0
-                }
-            });
-
-            this._container = dom.create('div', {
-                class: `switch-${this._settings.size}`
-            });
-
-            const onToggle = dom.create('div', {
-                class: [this.constructor.classes.toggle, this.constructor.classes.toggleOn, `switch-${this._settings.onStyle}`],
-                text: this._settings.onText
-            });
-
-            const divider = dom.create('div', {
-                class: [this.constructor.classes.toggle, this.constructor.classes.toggleDivider, `switch-${this._settings.dividerStyle}`],
-                text: ''
-            });
-
-            const offToggle = dom.create('div', {
-                class: [this.constructor.classes.toggle, this.constructor.classes.toggleOff, `switch-${this._settings.offStyle}`],
-                text: this._settings.offText
-            });
-
-            dom.append(this._container, onToggle);
-            dom.append(this._container, divider);
-            dom.append(this._container, offToggle);
-            dom.append(this._outerContainer, this._container);
-
-            // hide the input node
-            dom.addClass(this._node, this.constructor.classes.hide);
-            dom.setAttribute(this._node, 'tabindex', -1);
-
-            dom.before(this._node, this._outerContainer);
-
-            if (this._settings.labelWidth) {
-                this._toggleWidth = this._settings.labelWidth;
-            } else {
-                this._toggleWidth = Math.max(
-                    dom.width(onToggle),
-                    dom.width(divider),
-                    dom.width(offToggle)
-                );
+        $.addEvent(this._outerContainer, 'click.ui.switch', (e) => {
+            if (
+                e.button ||
+                $.getDataset(this._container, 'uiAnimating') ||
+                $.getDataset(this._container, 'uiSliding')
+            ) {
+                return;
             }
 
-            dom.setStyle(this._outerContainer, 'width', `${this._toggleWidth * 2}px`);
-            dom.setStyle(this._container, 'width', `${this._toggleWidth * 3}px`);
-            dom.setStyle(this._container, 'transform', `translateX(${-this._toggleWidth}px)`);
-            dom.setStyle(onToggle, 'width', `${this._toggleWidth}px`);
-            dom.setStyle(divider, 'width', `${this._toggleWidth}px`);
-            dom.setStyle(offToggle, 'width', `${this._toggleWidth}px`);
+            this.toggleState();
+        });
+
+        let startX;
+
+        const downEvent = (e) => {
+            if (
+                e.button ||
+                $.getDataset(this._container, 'uiAnimating') ||
+                $.getDataset(this._container, 'uiSliding')
+            ) {
+                return false;
+            }
+
+            const pos = ui.getPosition(e);
+            startX = pos.x - this._currentX;
+        };
+
+        const moveEvent = (e) => {
+            if (!$.getDataset(this._container, 'uiSliding')) {
+                $.setDataset(this._container, { uiSliding: true });
+            }
+
+            const pos = ui.getPosition(e);
+            const currentX = pos.x;
+            this._currentX = $._clamp(currentX - startX, -this._toggleWidth, 0);
+
+            $.setStyle(this._container, { transform: `translateX(${this._currentX}px)` });
+        };
+
+        const upEvent = (_) => {
+            if (!$.getDataset(this._container, 'uiSliding')) {
+                return;
+            }
+
+            const checked = Math.abs(this._currentX) < this._toggleWidth / 2;
+
+            setTimeout(_ => {
+                $.removeDataset(this._container, 'uiSliding');
+
+                this._animateState(checked);
+            }, 0);
+        };
+
+        const dragEvent = $.mouseDragFactory(downEvent, moveEvent, upEvent);
+
+        $.addEvent(this._outerContainer, 'mousedown.ui.switch touchstart.ui.switch', dragEvent);
+    }
+
+    /**
+     * Animate the switch checkbox state.
+     * @param {Boolean} checked Whether to enable the switch checkbox.
+     */
+    function _animateState(checked) {
+        if ($.getDataset(this._container, 'uiSliding')) {
+            return;
         }
 
-    });
+        if ($.getDataset(this._container, 'uiAnimating')) {
+            $.stop(this._container, { finish: false });
+        }
 
+        let targetX; let progress;
+        if (checked) {
+            targetX = 0;
+            progress = (this._toggleWidth - Math.abs(this._currentX)) / this._toggleWidth;
+        } else {
+            targetX = -this._toggleWidth;
+            progress = Math.abs(this._currentX) / this._toggleWidth;
+        }
+
+        if (!this._options.animate || progress >= 1) {
+            $.setStyle(this._container, { transform: `translateX(${targetX}px)` });
+            this._currentX = targetX;
+            this._setState(checked);
+            $.removeDataset(this._container, 'uiAnimating');
+            return;
+        }
+
+        const progressRemaining = 1 - progress;
+
+        $.setDataset(this._container, { uiAnimating: true });
+
+        $.animate(
+            this._container,
+            (node, newProgress) => {
+                this._currentX = $._lerp(this._currentX, targetX, progress + (newProgress * progressRemaining));
+                $.setStyle(node, { transform: `translateX(${this._currentX}px)` });
+            },
+            {
+                duration: this._options.duration * progressRemaining,
+            },
+        ).then((_) => {
+            $.removeDataset(this._container, 'uiAnimating');
+            this._currentX = targetX;
+            this._setState(checked);
+        }).catch((_) => {
+            $.removeDataset(this._container, 'uiAnimating');
+        });
+    }
+    /**
+     * Refresh the label/divider widths.
+     */
+    function _refresh() {
+        if (this._options.labelWidth) {
+            this._toggleWidth = this._options.labelWidth;
+        } else {
+            this._toggleWidth = Math.max(
+                $.width(this._onToggle),
+                $.width(this._offToggle),
+            );
+        }
+
+        if (this._options.dividerWidth) {
+            this._dividerWidth = this._options.dividerWidth;
+        } else {
+            this._dividerWidth = this._toggleWidth / 2;
+        }
+
+        const outerWidth = this._toggleWidth + this._dividerWidth;
+        const totalWidth = (this._toggleWidth * 2) + this._dividerWidth;
+
+        $.setStyle(this._outerContainer, { width: `${outerWidth}px` });
+        $.setStyle(this._container, {
+            width: `${totalWidth}px`,
+            transform: `translateX(${-this._toggleWidth}px)`,
+        });
+        $.setStyle(this._onToggle, { width: `${this._toggleWidth}px` });
+        $.setStyle(this._divider, { width: `${this._dividerWidth}px` });
+        $.setStyle(this._offToggle, { width: `${this._toggleWidth}px` });
+    }
+    /**
+     * Refresh the disabled styling.
+     */
+    function _refreshDisabled() {
+        if ($.is(this._node, ':disabled')) {
+            $.addClass(this._outerContainer, this.constructor.classes.disabled);
+        } else {
+            $.removeClass(this._outerContainer, this.constructor.classes.disabled);
+        }
+    }
+    /**
+     * Set the switch checkbox state.
+     * @param {Boolean} checked Whether to enable the switch checkbox.
+     */
+    function _setState(checked) {
+        if (this.getState() === checked) {
+            return;
+        }
+
+        $.setProperty(this._node, { checked }, { data: { skipUpdate: true } });
+        $.triggerEvent(this._node, 'change.ui.switch');
+    }
+
+    /**
+     * Render the switch.
+     */
+    function _render() {
+        this._outerContainer = $.create('div', {
+            class: [
+                this.constructor.classes.outer,
+                `switch-${this._options.size}`,
+            ],
+            attributes: {
+                tabindex: 0,
+            },
+        });
+
+        this._container = $.create('div', {
+            class: this.constructor.classes.switch,
+        });
+
+        this._onToggle = $.create('div', {
+            class: [this.constructor.classes.toggleOn, this._options.onStyle],
+            text: this._options.onText,
+        });
+
+        this._divider = $.create('div', {
+            class: [this.constructor.classes.toggleDivider, this._options.dividerStyle],
+            text: '',
+        });
+
+        this._offToggle = $.create('div', {
+            class: [this.constructor.classes.toggleOff, this._options.offStyle],
+            text: this._options.offText,
+        });
+
+        $.append(this._container, this._onToggle);
+        $.append(this._container, this._divider);
+        $.append(this._container, this._offToggle);
+        $.append(this._outerContainer, this._container);
+
+        // hide the input node
+        $.addClass(this._node, this.constructor.classes.hide);
+        $.setAttribute(this._node, { tabindex: -1 });
+
+        $.before(this._node, this._outerContainer);
+    }
 
     // Switch default options
     Switch.defaults = {
         size: 'md',
-        onStyle: 'primary',
-        offStyle: 'secondary',
-        dividerStyle: 'light',
+        onStyle: 'text-bg-primary',
+        offStyle: 'text-bg-secondary',
+        dividerStyle: 'bg-body-tertiary',
         onText: 'ON',
         offText: 'OFF',
         labelWidth: null,
+        dividerWidth: null,
         animate: true,
-        duration: 500
+        duration: 500,
     };
 
-    // Switch classes
+    // Switch class names
     Switch.classes = {
         disabled: 'switch-disabled',
         hide: 'visually-hidden',
-        outer: 'overflow-hidden user-select-none switch-outer',
-        toggle: 'd-table-cell text-center',
+        outer: 'switch-outer',
+        switch: 'switch',
         toggleDivider: 'switch-toggle-divider',
         toggleOff: 'switch-toggle-off',
-        toggleOn: 'switch-toggle-on'
+        toggleOn: 'switch-toggle-on',
     };
 
-    UI.initComponent('switch', Switch);
+    // Switch prototype
+    const proto = Switch.prototype;
 
-    UI.Switch = Switch;
+    proto._animateState = _animateState;
+    proto._events = _events;
+    proto._refresh = _refresh;
+    proto._refreshDisabled = _refreshDisabled;
+    proto._render = _render;
+    proto._setState = _setState;
 
-});
+    // Switch init
+    ui.initComponent('switch', Switch);
+
+    exports.Switch = Switch;
+
+}));
+//# sourceMappingURL=frost-ui-switch.js.map

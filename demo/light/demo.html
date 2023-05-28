@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FrostUI Switch</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui.css">
-    <link rel="stylesheet" href="../dist/frost-ui-switch.css">
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui-bundle.js"></script>
-    <script src="../dist/frost-ui-switch.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@2.3.1/dist/frost-ui.css">
+    <link rel="stylesheet" href="../../dist/frost-ui-switch.css">
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@2.3.1/dist/frost-ui-bundle.js"></script>
+    <script src="../../dist/frost-ui-switch.js"></script>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
         </div>
         <div class="mb-4">
             <label for="switchStyles">Styles</label>
-            <input id="switchStyles" type="checkbox" data-ui-on-style="success" data-ui-divider-style="dark" data-ui-off-style="danger" />
+            <input id="switchStyles" type="checkbox" data-ui-on-style="text-bg-success" data-ui-divider-style="bg-warning" data-ui-off-style="text-bg-danger" />
         </div>
         <div class="mb-4">
             Sizes
@@ -44,8 +44,12 @@
             <input id="switchText" type="checkbox" data-ui-on-text="I" data-ui-off-text="O" />
         </div>
         <div class="mb-4">
-            <label for="switchWidth">Width</label>
-            <input id="switchWidth" type="checkbox" data-ui-label-width="100" />
+            <label for="switchLabelWidth">Label Width</label>
+            <input id="switchLabelWidth" type="checkbox" data-ui-label-width="100" />
+        </div>
+        <div class="mb-4">
+            <label for="switchDividerWidth">Divider Width</label>
+            <input id="switchDividerWidth" type="checkbox" data-ui-divider-width="100" />
         </div>
         <div class="mb-4">
             <label for="switchDisabled">Disabled</label>
@@ -53,16 +57,17 @@
         </div>
     </div>
     <script>
-        const switchDefault = dom.findOne('#switchDefault');
-        const switchStyles = dom.findOne('#switchStyles');
-        const switchXs = dom.findOne('#switchXs');
-        const switchSm = dom.findOne('#switchSm');
-        const switchMd = dom.findOne('#switchMd');
-        const switchLg = dom.findOne('#switchLg');
-        const switchXl = dom.findOne('#switchXl');
-        const switchText = dom.findOne('#switchText');
-        const switchWidth = dom.findOne('#switchWidth');
-        const switchDisabled = dom.findOne('#switchDisabled');
+        const switchDefault = $.findOne('#switchDefault');
+        const switchStyles = $.findOne('#switchStyles');
+        const switchXs = $.findOne('#switchXs');
+        const switchSm = $.findOne('#switchSm');
+        const switchMd = $.findOne('#switchMd');
+        const switchLg = $.findOne('#switchLg');
+        const switchXl = $.findOne('#switchXl');
+        const switchText = $.findOne('#switchText');
+        const switchLabelWidth = $.findOne('#switchLabelWidth');
+        const switchDividerWidth = $.findOne('#switchDividerWidth');
+        const switchDisabled = $.findOne('#switchDisabled');
 
         UI.Switch.init(switchDefault);
         UI.Switch.init(switchStyles);
@@ -72,7 +77,8 @@
         UI.Switch.init(switchLg);
         UI.Switch.init(switchXl);
         UI.Switch.init(switchText);
-        UI.Switch.init(switchWidth);
+        UI.Switch.init(switchLabelWidth);
+        UI.Switch.init(switchDividerWidth);
         UI.Switch.init(switchDisabled);
     </script>
 </body>

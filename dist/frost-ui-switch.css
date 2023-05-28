@@ -1,93 +1,57 @@
 .switch-outer {
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 0.2rem;
+  --ui-switch-padding-x: 1rem;
+  --ui-switch-padding-y: 0.25rem;
+  --ui-switch-font-size: 1rem;
+  --ui-switch-border-width: var(--ui-border-width);
+  --ui-switch-border-color: var(--ui-border-color-translucent);
+  --ui-switch-border-radius: var(--ui-border-radius);
+  --ui-switch-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color);
+  --ui-switch-disabled-opacity: var(--ui-disabled-opacity);
+  overflow: hidden;
+  font-size: var(--ui-switch-font-size);
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  border: var(--ui-switch-border-width) var(--ui-border-style) var(--ui-switch-border-color);
+  border-radius: var(--ui-switch-border-radius);
   outline: 0;
 }
 .switch-outer:focus {
-  box-shadow: 0 0 0 1px #2b55d4;
+  box-shadow: var(--ui-switch-focus-box-shadow);
 }
 
 .switch-disabled {
   pointer-events: none;
-  opacity: 0.5;
+  opacity: var(--ui-switch-disabled-opacity);
 }
 
-.switch-primary {
-  color: #fff;
-  background-color: #2b55d4;
+.switch {
+  display: flex;
 }
-
-.switch-secondary {
-  color: #fff;
-  background-color: #606d7b;
-}
-
-.switch-success {
-  color: #fff;
-  background-color: #228c22;
-}
-
-.switch-info {
-  color: #fff;
-  background-color: #0f7f85;
-}
-
-.switch-warning {
-  color: #000;
-  background-color: #f5a119;
-}
-
-.switch-danger {
-  color: #fff;
-  background-color: #dc143c;
-}
-
-.switch-light {
-  color: #000;
-  background-color: #fafaff;
-}
-
-.switch-dark {
-  color: #fff;
-  background-color: #1f3333;
-}
-
-.switch-xl {
-  font-size: clamp(1.35rem, calc(1.35rem + 0.33vw), 1.5rem);
-}
-.switch-xl .switch-toggle-on,
-.switch-xl .switch-toggle-off {
-  padding: 0.25rem 1.5rem;
-}
-
-.switch-lg {
-  font-size: 1.25rem;
-}
-.switch-lg .switch-toggle-on,
-.switch-lg .switch-toggle-off {
-  padding: 0.25rem 1.25rem;
-}
-
-.switch-md {
-  font-size: 1rem;
-}
-.switch-md .switch-toggle-on,
-.switch-md .switch-toggle-off {
-  padding: 0.25rem 1rem;
-}
-
-.switch-sm {
-  font-size: 0.75rem;
-}
-.switch-sm .switch-toggle-on,
-.switch-sm .switch-toggle-off {
-  padding: 0.25rem 0.75rem;
+.switch .switch-toggle-on,
+.switch .switch-toggle-off {
+  padding: var(--ui-switch-padding-y) var(--ui-switch-padding-x);
 }
 
 .switch-xs {
-  font-size: 0.5rem;
+  --ui-switch-padding-x: 0.5rem;
+  --ui-switch-font-size: 0.5rem;
 }
-.switch-xs .switch-toggle-on,
-.switch-xs .switch-toggle-off {
-  padding: 0.25rem 0.5rem;
+
+.switch-sm {
+  --ui-switch-padding-x: 0.75rem;
+  --ui-switch-font-size: 0.75rem;
 }
+
+.switch-lg {
+  --ui-switch-padding-x: 1.25rem;
+  --ui-switch-font-size: 1.25rem;
+}
+
+.switch-xl {
+  --ui-switch-padding-x: 1.5rem;
+  --ui-switch-font-size: clamp(1.35rem, 1.35rem + 0.33vw, 1.5rem);
+}
+
+/*# sourceMappingURL=frost-ui-switch.css.map */

@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FrostUI Switch Methods</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@2.3.1/dist/frost-ui.css">
     <link rel="stylesheet" href="../dist/frost-ui-switch.css">
-    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@1.4.6/dist/frost-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/elusivecodes/frostui@2.3.1/dist/frost-ui-bundle.js"></script>
     <script src="../dist/frost-ui-switch.js"></script>
 </head>
 
@@ -36,51 +36,51 @@
         <samp id="output"></samp>
     </div>
     <script>
-        const switchDefault = dom.findOne('#switchDefault');
-        const switchInit = dom.findOne('#switchInit');
-        const switchDispose = dom.findOne('#switchDispose');
-        const switchEnable = dom.findOne('#switchEnable');
-        const switchDisable = dom.findOne('#switchDisable');
-        const switchGetState = dom.findOne('#switchGetState');
-        const switchSetStateOn = dom.findOne('#switchSetStateOn');
-        const switchSetStateOff = dom.findOne('#switchSetStateOff');
-        const switchToggleState = dom.findOne('#switchToggleState');
-        const output = dom.findOne('#output');
+        const switchDefault = $.findOne('#switchDefault');
+        const switchInit = $.findOne('#switchInit');
+        const switchDispose = $.findOne('#switchDispose');
+        const switchEnable = $.findOne('#switchEnable');
+        const switchDisable = $.findOne('#switchDisable');
+        const switchGetState = $.findOne('#switchGetState');
+        const switchSetStateOn = $.findOne('#switchSetStateOn');
+        const switchSetStateOff = $.findOne('#switchSetStateOff');
+        const switchToggleState = $.findOne('#switchToggleState');
+        const output = $.findOne('#output');
 
-        dom.addEvent(switchInit, 'click', e => {
+        $.addEvent(switchInit, 'click', e => {
             UI.Switch.init(switchDefault);
         });
 
-        dom.addEvent(switchDispose, 'click', e => {
+        $.addEvent(switchDispose, 'click', e => {
             UI.Switch.init(switchDefault).dispose();
         });
 
-        dom.addEvent(switchEnable, 'click', e => {
+        $.addEvent(switchEnable, 'click', e => {
             UI.Switch.init(switchDefault).enable();
         });
 
-        dom.addEvent(switchDisable, 'click', e => {
+        $.addEvent(switchDisable, 'click', e => {
             UI.Switch.init(switchDefault).disable();
         });
 
-        dom.addEvent(switchGetState, 'click', e => {
+        $.addEvent(switchGetState, 'click', e => {
             const state = UI.Switch.init(switchDefault).getState();
-            dom.setText(output, `State: ${state}`);
+            $.setText(output, `State: ${state}`);
         });
 
-        dom.addEvent(switchSetStateOn, 'click', e => {
+        $.addEvent(switchSetStateOn, 'click', e => {
             UI.Switch.init(switchDefault).setState(true);
         });
 
-        dom.addEvent(switchSetStateOff, 'click', e => {
+        $.addEvent(switchSetStateOff, 'click', e => {
             UI.Switch.init(switchDefault).setState(false);
         });
 
-        dom.addEvent(switchToggleState, 'click', e => {
+        $.addEvent(switchToggleState, 'click', e => {
             UI.Switch.init(switchDefault).toggleState();
         });
 
-        dom.triggerEvent(switchInit, 'click');
+        $.triggerEvent(switchInit, 'click');
     </script>
 </body>
 

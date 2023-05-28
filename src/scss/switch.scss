@@ -1,69 +1,58 @@
-@import "functions";
 @import "vars";
 
 .switch-outer {
-    border: $switch-border-size $border-style $switch-border-color;
-    border-radius: $switch-border-radius;
+    --ui-switch-padding-x: #{$switch-padding-x};
+    --ui-switch-padding-y: #{$switch-padding-y};
+    --ui-switch-font-size: #{$switch-font-size};
+    --ui-switch-border-width: #{$switch-border-width};
+    --ui-switch-border-color: #{$switch-border-color};
+    --ui-switch-border-radius: #{$switch-border-radius};
+    --ui-switch-focus-box-shadow: #{$switch-focus-box-shadow};
+    --ui-switch-disabled-opacity: #{$switch-disabled-opacity};
+
+    overflow: hidden;
+    font-size: var(--ui-switch-font-size);
+    text-align: center;
+    user-select: none;
+    border: var(--ui-switch-border-width) var(--ui-border-style) var(--ui-switch-border-color);
+    border-radius: var(--ui-switch-border-radius);
     outline: 0;
 
     &:focus {
-        box-shadow: 0 0 0 $switch-border-size $switch-focus-outline-color;
+        box-shadow: var(--ui-switch-focus-box-shadow);
     }
 }
 
 .switch-disabled {
     pointer-events: none;
-    opacity: $switch-disabled-opacity;
+    opacity: var(--ui-switch-disabled-opacity);
 }
 
-@each $name, $color in $switch-variants {
-    .switch-#{$name} {
-        color: text-color($color);
-        background-color: $color;
-    }
-}
-
-.switch-xl {
-    font-size: text-size($switch-xl-font-size);
+.switch {
+    display: flex;
 
     .switch-toggle-on,
     .switch-toggle-off {
-        padding: $switch-padding-y $switch-xl-padding-x;
-    }
-}
-
-.switch-lg {
-    font-size: text-size($switch-lg-font-size);
-
-    .switch-toggle-on,
-    .switch-toggle-off {
-        padding: $switch-padding-y $switch-lg-padding-x;
-    }
-}
-
-.switch-md {
-    font-size: text-size($switch-md-font-size);
-
-    .switch-toggle-on,
-    .switch-toggle-off {
-        padding: $switch-padding-y $switch-md-padding-x;
-    }
-}
-
-.switch-sm {
-    font-size: text-size($switch-sm-font-size);
-
-    .switch-toggle-on,
-    .switch-toggle-off {
-        padding: $switch-padding-y $switch-sm-padding-x;
+        padding: var(--ui-switch-padding-y) var(--ui-switch-padding-x);
     }
 }
 
 .switch-xs {
-    font-size: text-size($switch-xs-font-size);
+    --ui-switch-padding-x: #{$switch-xs-padding-x};
+    --ui-switch-font-size: #{$switch-xs-font-size};
+}
 
-    .switch-toggle-on,
-    .switch-toggle-off {
-        padding: $switch-padding-y $switch-xs-padding-x;
-    }
+.switch-sm {
+    --ui-switch-padding-x: #{$switch-sm-padding-x};
+    --ui-switch-font-size: #{$switch-sm-font-size};
+}
+
+.switch-lg {
+    --ui-switch-padding-x: #{$switch-lg-padding-x};
+    --ui-switch-font-size: #{$switch-lg-font-size};
+}
+
+.switch-xl {
+    --ui-switch-padding-x: #{$switch-xl-padding-x};
+    --ui-switch-font-size: #{$switch-xl-font-size};
 }

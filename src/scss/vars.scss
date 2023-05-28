@@ -1,45 +1,18 @@
-$spacing: 1rem !default;
-
-$disabled-opacity: .5 !default;
-
-// border
-$border-size: 1px !default;
-$border-style: solid !default;
-$border-radius: .2rem !default;
-
-// color
-$black: #000 !default;
-
-$color-variants: (
-    primary: #2b55d4,
-    secondary: #606d7b,
-    success: #228c22,
-    info: #0f7f85,
-    warning: #f5a119,
-    danger: #dc143c,
-    light: #fafaff,
-    dark: #1f3333
-) !default;
-
-$border-color: fade($black, .15) !default;
-
 // switch
-$switch-variants: $color-variants !default;
+$switch-padding-y: .25rem !default;
+$switch-padding-x: 1rem !default;
+$switch-font-size: 1rem !default;
+$switch-border-width: var(--ui-border-width) !default;
+$switch-border-color: var(--ui-border-color-translucent) !default;
+$switch-border-radius: var(--ui-border-radius) !default;
+$switch-focus-box-shadow: 0 0 0 var(--ui-focus-ring-width) var(--ui-focus-ring-color) !default;
+$switch-disabled-opacity: var(--ui-disabled-opacity) !default;
 
-$switch-border-size: $border-size !default;
-$switch-border-color: $border-color !default;
-$switch-border-radius: $border-radius !default;
-$switch-padding-y: $spacing * .25 !default;
-$switch-focus-outline-color: map-get($color-variants, primary) !default;
-$switch-disabled-opacity: $disabled-opacity !default;
-
-$switch-xl-font-size: 1.5 !default;
-$switch-xl-padding-x: $spacing * 1.5 !default;
-$switch-lg-font-size: 1.25 !default;
-$switch-lg-padding-x: $spacing * 1.25 !default;
-$switch-md-font-size: 1 !default;
-$switch-md-padding-x: $spacing !default;
-$switch-sm-font-size: .75 !default;
-$switch-sm-padding-x: $spacing * .75 !default;
-$switch-xs-font-size: .5 !default;
-$switch-xs-padding-x: $spacing * .5 !default;
+$switch-xs-font-size: .5rem !default;
+$switch-xs-padding-x: .5rem !default;
+$switch-sm-font-size: .75rem !default;
+$switch-sm-padding-x: .75rem !default;
+$switch-lg-font-size: 1.25rem !default;
+$switch-lg-padding-x: 1.25rem !default;
+$switch-xl-font-size: clamp(1.35rem, calc(1.35rem + .33vw), 1.5rem) !default;
+$switch-xl-padding-x: 1.5rem !default;
