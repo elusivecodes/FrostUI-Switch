@@ -80,7 +80,7 @@ export function _events() {
 
         const checked = Math.abs(this._currentX) < this._toggleWidth / 2;
 
-        setTimeout(_ => {
+        setTimeout((_) => {
             $.removeDataset(this._container, 'uiSliding');
 
             this._animateState(checked);
