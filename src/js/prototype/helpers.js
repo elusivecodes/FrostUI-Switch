@@ -88,11 +88,18 @@ export function _refresh() {
  * Refresh the disabled styling.
  */
 export function _refreshDisabled() {
-    if ($.is(this._node, ':disabled')) {
+    const disabled = $.is(this._node, ':disabled');
+
+    if (disabled) {
         $.addClass(this._outerContainer, this.constructor.classes.disabled);
     } else {
         $.removeClass(this._outerContainer, this.constructor.classes.disabled);
     }
+
+    $.setAttribute(this._outerContainer, {
+        'aria-disabled': disabled,
+        'tabindex': disabled ? -1 : 0,
+    });
 };
 
 /**
@@ -104,6 +111,7 @@ export function _setState(checked) {
         return;
     }
 
-    $.setProperty(this._node, { checked }, { data: { skipUpdate: true } });
-    $.triggerEvent(this._node, 'change.ui.switch');
+    $.setProperty(this._node, { checked });
+    $.setAttribute(this._outerContainer, { 'aria-checked': checked });
+    $.triggerEvent(this._node, 'change.ui.switch', { data: { skipUpdate: true } });
 };

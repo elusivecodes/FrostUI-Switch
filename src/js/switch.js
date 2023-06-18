@@ -1,5 +1,5 @@
 import $ from '@fr0st/query';
-import { BaseComponent } from '@fr0st/ui';
+import { BaseComponent, generateId } from '@fr0st/ui';
 
 /**
  * Switch Class
@@ -13,6 +13,14 @@ export default class Switch extends BaseComponent {
      */
     constructor(node, options) {
         super(node, options);
+
+        const id = $.getAttribute(this._node, 'id');
+        this._label = $.findOne(`label[for="${id}"]`);
+
+        if (this._label && !$.getAttribute(this._label, 'id')) {
+            $.setAttribute(this._label, { id: generateId('switch-label') });
+            this._labelId = true;
+        }
 
         this._render();
         this._refresh();
@@ -37,12 +45,17 @@ export default class Switch extends BaseComponent {
      * Dispose the Switch.
      */
     dispose() {
+        if (this._labelId) {
+            $.removeAttribute(this._label, 'id');
+        }
+
         $.remove(this._outerContainer);
         $.removeEvent(this._node, 'focus.ui.switch');
         $.removeEvent(this._node, 'change.ui.switch');
         $.removeAttribute(this._node, 'tabindex');
         $.removeClass(this._node, this.constructor.classes.hide);
 
+        this._label = null;
         this._outerContainer = null;
         this._container = null;
         this._onToggle = null;

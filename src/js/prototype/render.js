@@ -10,12 +10,18 @@ export function _render() {
             `switch-${this._options.size}`,
         ],
         attributes: {
-            tabindex: 0,
+            'role': 'switch',
+            'aria-checked': this.getState(),
+            'aria-required': $.getProperty(this._node, 'required'),
+            'aria-labelledby': $.getAttribute(this._label, 'id'),
         },
     });
 
     this._container = $.create('div', {
         class: this.constructor.classes.switch,
+        attributes: {
+            'aria-hidden': true,
+        },
     });
 
     this._onToggle = $.create('div', {

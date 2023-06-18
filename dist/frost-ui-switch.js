@@ -17,6 +17,14 @@
         constructor(node, options) {
             super(node, options);
 
+            const id = $.getAttribute(this._node, 'id');
+            this._label = $.findOne(`label[for="${id}"]`);
+
+            if (this._label && !$.getAttribute(this._label, 'id')) {
+                $.setAttribute(this._label, { id: ui.generateId('switch-label') });
+                this._labelId = true;
+            }
+
             this._render();
             this._refresh();
             this._refreshDisabled();
@@ -40,12 +48,17 @@
          * Dispose the Switch.
          */
         dispose() {
+            if (this._labelId) {
+                $.removeAttribute(this._label, 'id');
+            }
+
             $.remove(this._outerContainer);
             $.removeEvent(this._node, 'focus.ui.switch');
             $.removeEvent(this._node, 'change.ui.switch');
             $.removeAttribute(this._node, 'tabindex');
             $.removeClass(this._node, this.constructor.classes.hide);
 
+            this._label = null;
             this._outerContainer = null;
             this._container = null;
             this._onToggle = null;
@@ -265,11 +278,18 @@
      * Refresh the disabled styling.
      */
     function _refreshDisabled() {
-        if ($.is(this._node, ':disabled')) {
+        const disabled = $.is(this._node, ':disabled');
+
+        if (disabled) {
             $.addClass(this._outerContainer, this.constructor.classes.disabled);
         } else {
             $.removeClass(this._outerContainer, this.constructor.classes.disabled);
         }
+
+        $.setAttribute(this._outerContainer, {
+            'aria-disabled': disabled,
+            'tabindex': disabled ? -1 : 0,
+        });
     }
     /**
      * Set the switch checkbox state.
@@ -280,8 +300,9 @@
             return;
         }
 
-        $.setProperty(this._node, { checked }, { data: { skipUpdate: true } });
-        $.triggerEvent(this._node, 'change.ui.switch');
+        $.setProperty(this._node, { checked });
+        $.setAttribute(this._outerContainer, { 'aria-checked': checked });
+        $.triggerEvent(this._node, 'change.ui.switch', { data: { skipUpdate: true } });
     }
 
     /**
@@ -294,12 +315,18 @@
                 `switch-${this._options.size}`,
             ],
             attributes: {
-                tabindex: 0,
+                'role': 'switch',
+                'aria-checked': this.getState(),
+                'aria-required': $.getProperty(this._node, 'required'),
+                'aria-labelledby': $.getAttribute(this._label, 'id'),
             },
         });
 
         this._container = $.create('div', {
             class: this.constructor.classes.switch,
+            attributes: {
+                'aria-hidden': true,
+            },
         });
 
         this._onToggle = $.create('div', {
