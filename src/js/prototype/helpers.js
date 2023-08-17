@@ -107,11 +107,12 @@ export function _refreshDisabled() {
  * @param {Boolean} checked Whether to enable the switch checkbox.
  */
 export function _setState(checked) {
+    $.setAttribute(this._outerContainer, { 'aria-checked': checked });
+
     if (this.getState() === checked) {
         return;
     }
 
     $.setProperty(this._node, { checked });
-    $.setAttribute(this._outerContainer, { 'aria-checked': checked });
     $.triggerEvent(this._node, 'change.ui.switch', { data: { skipUpdate: true } });
 };
