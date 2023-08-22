@@ -13,9 +13,13 @@ export function _render() {
             'role': 'switch',
             'aria-checked': this.getState(),
             'aria-required': $.getProperty(this._node, 'required'),
-            'aria-labelledby': $.getAttribute(this._label, 'id'),
         },
     });
+
+    if (this._label) {
+        const labelId = $.getAttribute(this._label, 'id');
+        $.setAttribute(this._outerContainer, { 'aria-labelledby': labelId });
+    }
 
     this._container = $.create('div', {
         class: this.constructor.classes.switch,
