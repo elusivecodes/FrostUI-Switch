@@ -375,7 +375,7 @@
         duration: 500,
     };
 
-    // Switch class names
+    // Switch classes
     Switch.classes = {
         disabled: 'switch-disabled',
         hide: 'visually-hidden',
