@@ -18,7 +18,7 @@
     border-radius: var(--ui-switch-border-radius);
     outline: 0;
 
-    &:focus {
+    &:focus-visible {
         box-shadow: var(--ui-switch-focus-box-shadow);
     }
 }

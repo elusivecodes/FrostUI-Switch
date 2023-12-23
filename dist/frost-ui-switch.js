@@ -187,7 +187,7 @@
             }, 0);
         };
 
-        const dragEvent = $.mouseDragFactory(downEvent, moveEvent, upEvent);
+        const dragEvent = $.mouseDragFactory(downEvent, moveEvent, upEvent, { preventDefault: false });
 
         $.addEvent(this._outerContainer, 'mousedown.ui.switch touchstart.ui.switch', dragEvent);
     }
