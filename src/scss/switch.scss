@@ -14,9 +14,9 @@
     font-size: var(--ui-switch-font-size);
     text-align: center;
     user-select: none;
+    outline: 0;
     border: var(--ui-switch-border-width) var(--ui-border-style) var(--ui-switch-border-color);
     border-radius: var(--ui-switch-border-radius);
-    outline: 0;
 
     &:focus-visible {
         box-shadow: var(--ui-switch-focus-box-shadow);

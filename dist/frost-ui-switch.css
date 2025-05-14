@@ -13,9 +13,9 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+  outline: 0;
   border: var(--ui-switch-border-width) var(--ui-border-style) var(--ui-switch-border-color);
   border-radius: var(--ui-switch-border-radius);
-  outline: 0;
 }
 .switch-outer:focus-visible {
   box-shadow: var(--ui-switch-focus-box-shadow);
